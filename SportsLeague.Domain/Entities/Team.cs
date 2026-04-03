@@ -8,6 +8,9 @@
         public string Stadium { get; set; } = string.Empty;
         public string? LogoUrl { get; set; }
         public DateTime FoundedDate { get; set; }
-
+        
+        // Navigation Property - Colección de jugadores - Relación entre dos entidades sin generar un query en SQL
+        public ICollection<Player> Players { get; set; } = new List<Player>();
     }
+
 }
