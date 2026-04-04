@@ -154,10 +154,11 @@ namespace SportsLeague.DataAccess.Context
             });
 
 
-            // Sponsor Configuration
+            // ── Sponsor Configuration ──
             modelBuilder.Entity<Sponsor>(entity =>
             {
-                // Nombre del patrocinador (debe ser único)
+                entity.HasKey(s => s.Id);
+
                 entity.Property(s => s.Name)
                       .IsRequired()
                       .HasMaxLength(150);
@@ -166,15 +167,35 @@ namespace SportsLeague.DataAccess.Context
                       .IsRequired()
                       .HasMaxLength(150);
 
+                entity.Property(s => s.CreatedAt)
+                      .IsRequired();
+
+                entity.Property(s => s.UpdatedAt)
+                      .IsRequired(false);
+
                 // Índice único: no se permiten sponsors con el mismo nombre
                 entity.HasIndex(s => s.Name)
                       .IsUnique();
             });
 
-            // TournamentSponsor Configuration
-
+            // ── TournamentSponsor Configuration ──
             modelBuilder.Entity<TournamentSponsor>(entity =>
             {
+                entity.HasKey(ts => ts.Id);
+
+                entity.Property(ts => ts.ContractAmount)
+                      .HasPrecision(18, 2)
+                      .IsRequired();
+
+                entity.Property(ts => ts.JoinedAt)
+                      .IsRequired();
+
+                entity.Property(ts => ts.CreatedAt)
+                      .IsRequired();
+
+                entity.Property(ts => ts.UpdatedAt)
+                      .IsRequired(false);
+
                 // Relación con Tournament
                 entity.HasOne(ts => ts.Tournament)
                       .WithMany(t => t.TournamentSponsors)
@@ -187,15 +208,11 @@ namespace SportsLeague.DataAccess.Context
                       .HasForeignKey(ts => ts.SponsorId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                // Monto del contrato (valor económico del patrocinio)
-                entity.Property(ts => ts.ContractAmount)
-                      .HasPrecision(18, 2)
-                      .IsRequired();
-
                 // Índice único compuesto: un sponsor solo una vez por torneo
                 entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
                       .IsUnique();
             });
+
 
         }
     }
