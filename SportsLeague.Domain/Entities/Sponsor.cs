@@ -1,16 +1,18 @@
-﻿using SportsLeague.Domain.Enums;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace SportsLeague.Domain.Entities;
-
-public class Sponsor : AuditBase
+namespace SportsLeague.Domain.Entities
 {
-    public string Name { get; set; } = string.Empty;
-    public string ContactEmail { get; set; } = string.Empty;
-    public string? Phone { get; set; }
-    public string? WebsiteUrl { get; set; }
-    public SponsorCategory Category { get; set; }
+    public class Sponsor : AuditBase
+    {
+        public string Name { get; set; } = string.Empty;
+        public string ContactEmail { get; set; } = string.Empty;
+        public string? Phone { get; set; }
+        public string? WebsiteUrl { get; set; }
+        public SponsorCategory Category { get; set; }
 
-    // Relación N:M con Tournament
-    public ICollection<TournamentSponsor> TournamentSponsors { get; set; }
-        = new List<TournamentSponsor>();
+        public ICollection<TournamentSponsor> TournamentSponsors { get; set; }
+            = new List<TournamentSponsor>();
+    }
 }

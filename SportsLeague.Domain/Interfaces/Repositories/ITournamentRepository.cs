@@ -2,9 +2,13 @@
 using SportsLeague.Domain.Enums;
 
 namespace SportsLeague.Domain.Interfaces.Repositories;
-
-public interface ITournamentRepository : IGenericRepository<Tournament>
 {
-    Task<IEnumerable<Tournament>> GetByStatusAsync(TournamentStatus status);
-    Task<Tournament?> GetByIdWithTeamsAsync(int id);
+public interface ITournamentSponsorRepository
+{
+    Task<IEnumerable<TournamentSponsor>> GetBySponsorIdAsync(int sponsorId);
+    Task<TournamentSponsor?> GetByTournamentAndSponsorAsync(int tournamentId, int sponsorId);
+    Task<TournamentSponsor?> GetByIdWithDetailsAsync(int id);
 }
+
+
+

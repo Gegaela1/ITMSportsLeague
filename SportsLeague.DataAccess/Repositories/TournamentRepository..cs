@@ -3,12 +3,11 @@ using SportsLeague.DataAccess.Context;
 using SportsLeague.Domain.Entities;
 using SportsLeague.Domain.Enums;
 using SportsLeague.Domain.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace SportsLeague.DataAccess.Repositories;
 
-public class TournamentRepository : GenericRepository<Tournament>, ITournamentRepository
-{
+public class TournamentRepository : GenericRepository<Tournament>, ITournamentRepository 
+{  
     public TournamentRepository(LeagueDbContext context) : base(context)
     {
     }
