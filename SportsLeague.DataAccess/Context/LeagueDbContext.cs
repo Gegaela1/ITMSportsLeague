@@ -16,6 +16,9 @@ namespace SportsLeague.DataAccess.Context
         public DbSet<Referee> Referees => Set<Referee>();             
         public DbSet<Tournament> Tournaments => Set<Tournament>();    
         public DbSet<TournamentTeam> TournamentTeams => Set<TournamentTeam>();
+        public DbSet<Sponsor> Sponsors => Set<Sponsor>(); //Nuevo
+        public DbSet<TournamentSponsor> TournamentSponsors => Set<TournamentSponsor>(); //Nuevo
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -138,6 +141,18 @@ namespace SportsLeague.DataAccess.Context
                 entity.HasIndex(tt => new { tt.TournamentId, tt.TeamId })
                       .IsUnique();
             });
+            modelBuilder.Entity<Sponsor>(entity =>
+            {
+                entity.HasIndex(e => e.Name)
+                      .IsUnique(); //Nuevo
+            });
+
+            modelBuilder.Entity<TournamentSponsor>(entity =>
+            {
+                entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
+                      .IsUnique(); //Nuevo
+            });
+
 
         }
     }

@@ -31,5 +31,10 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src =>
                     src.TournamentTeams != null ? src.TournamentTeams.Count : 0)); // Condición ternaria
 
+        // Sponsor mappings
+        CreateMap<Sponsor, SponsorResponseDTO>();
+        CreateMap<SponsorRequestDTO, Sponsor>();
+
+
     }
 }
