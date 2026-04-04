@@ -141,18 +141,49 @@ namespace SportsLeague.DataAccess.Context
                 entity.HasIndex(tt => new { tt.TournamentId, tt.TeamId })
                       .IsUnique();
             });
+
+            // Sponsor Configuration
             modelBuilder.Entity<Sponsor>(entity =>
             {
-                entity.HasIndex(e => e.Name)
-                      .IsUnique(); //Nuevo
+                // Nombre del patrocinador (debe ser único)
+                entity.Property(s => s.Name)
+                      .IsRequired()
+                      .HasMaxLength(150);
+
+                entity.Property(s => s.ContactEmail)
+                      .IsRequired()
+                      .HasMaxLength(150);
+
+                // Índice único: no se permiten sponsors con el mismo nombre
+                entity.HasIndex(s => s.Name)
+                      .IsUnique();
             });
+
+            // TournamentSponsor Configuration
 
             modelBuilder.Entity<TournamentSponsor>(entity =>
             {
-                entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
-                      .IsUnique(); //Nuevo
-            });
+                // Relación con Tournament
+                entity.HasOne(ts => ts.Tournament)
+                      .WithMany(t => t.TournamentSponsors)
+                      .HasForeignKey(ts => ts.TournamentId)
+                      .OnDelete(DeleteBehavior.Cascade);
 
+                // Relación con Sponsor
+                entity.HasOne(ts => ts.Sponsor)
+                      .WithMany(s => s.TournamentSponsors)
+                      .HasForeignKey(ts => ts.SponsorId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Monto del contrato (valor económico del patrocinio)
+                entity.Property(ts => ts.ContractAmount)
+                      .HasPrecision(18, 2)
+                      .IsRequired();
+
+                // Índice único compuesto: un sponsor solo una vez por torneo
+                entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
+                      .IsUnique();
+            });
 
         }
     }
