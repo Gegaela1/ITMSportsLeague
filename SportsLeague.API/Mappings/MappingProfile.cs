@@ -32,8 +32,8 @@ public class MappingProfile : Profile
                     src.TournamentTeams != null ? src.TournamentTeams.Count : 0)); // Condición ternaria
 
         // Sponsor mappings
-        CreateMap<Sponsor, SponsorResponseDTO>();
-        CreateMap<SponsorRequestDTO, Sponsor>();
+        CreateMap<Sponsor, SponsorResponseDTO>(); //Nuevo
+        CreateMap<SponsorRequestDTO, Sponsor>(); //Nuevo
 
 
     }
