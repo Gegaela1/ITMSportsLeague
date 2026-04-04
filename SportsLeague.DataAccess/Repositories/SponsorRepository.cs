@@ -6,13 +6,12 @@ using SportsLeague.Domain.Interfaces.Repositories;
 
 namespace SportsLeague.DataAccess.Repositories
 {
+
     public class SponsorRepository
         : GenericRepository<Sponsor>, ISponsorRepository
     {
         public SponsorRepository(LeagueDbContext context)
-            : base(context)
-        {
-        }
+            : base(context) { }
 
         public async Task<IEnumerable<Sponsor>> GetByNameAsync(string name)
         {

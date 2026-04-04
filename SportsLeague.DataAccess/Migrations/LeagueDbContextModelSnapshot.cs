@@ -113,14 +113,16 @@ namespace SportsLeague.DataAccess.Migrations
 
                     b.Property<string>("ContactEmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
@@ -230,6 +232,7 @@ namespace SportsLeague.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("ContractAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -310,7 +313,7 @@ namespace SportsLeague.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("SportsLeague.Domain.Entities.Tournament", "Tournament")
-                        .WithMany()
+                        .WithMany("TournamentSponsors")
                         .HasForeignKey("TournamentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -353,6 +356,8 @@ namespace SportsLeague.DataAccess.Migrations
 
             modelBuilder.Entity("SportsLeague.Domain.Entities.Tournament", b =>
                 {
+                    b.Navigation("TournamentSponsors");
+
                     b.Navigation("TournamentTeams");
                 });
 #pragma warning restore 612, 618
