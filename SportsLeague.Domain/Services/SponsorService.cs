@@ -69,7 +69,6 @@ public class SponsorService : ISponsorService
         await _sponsorRepository.DeleteAsync(id);
     }
 
-
     public async Task<TournamentSponsor> AddSponsorToTournamentAsync(
         int sponsorId,
         int tournamentId,
@@ -100,6 +99,20 @@ public class SponsorService : ISponsorService
     public async Task<IEnumerable<TournamentSponsor>> GetTournamentsAsync(int sponsorId)
     {
         return await _tournamentSponsorRepository.GetBySponsorIdAsync(sponsorId);
+    }
+
+    public async Task RemoveSponsorFromTournamentAsync(
+        int sponsorId,
+        int tournamentId)
+    {
+        var relation = await _tournamentSponsorRepository
+            .GetByTournamentAndSponsorAsync(tournamentId, sponsorId);
+
+        if (relation == null)
+            throw new KeyNotFoundException(
+                "The sponsor is not linked to the specified tournament.");
+
+        await _tournamentSponsorRepository.DeleteAsync(relation.Id);
     }
 }
 

@@ -74,4 +74,54 @@ public class SponsorController : ControllerBase
         await _sponsorService.DeleteAsync(id);
         return NoContent();
     }
+    // GET: api/Sponsor/{id}/tournaments
+
+    [HttpGet("{id}/tournaments")]
+    public async Task<ActionResult<IEnumerable<TournamentSponsorResponseDTO>>> GetTournaments(
+            int id)
+    {
+        var tournaments = await _sponsorService.GetTournamentsAsync(id);
+
+        var response = tournaments.Select(ts => new TournamentSponsorResponseDTO
+        {
+            TournamentId = ts.TournamentId,
+            TournamentName = ts.Tournament.Name,
+            ContractAmount = ts.ContractAmount,
+            JoinedAt = ts.JoinedAt
+        });
+
+        return Ok(response);
+    }
+    // POST: api/Sponsor/{id}/tournaments
+
+    [HttpPost("{id}/tournaments")]
+    public async Task<ActionResult<TournamentSponsorResponseDTO>> AddSponsorToTournament(
+            int id,
+            [FromBody] TournamentSponsorRequestDTO request)
+    {
+        var result = await _sponsorService.AddSponsorToTournamentAsync(
+            id,
+            request.TournamentId,
+            request.ContractAmount);
+
+        var response = new TournamentSponsorResponseDTO
+        {
+            TournamentId = result.TournamentId,
+            TournamentName = result.Tournament.Name,
+            ContractAmount = result.ContractAmount,
+            JoinedAt = result.JoinedAt
+        };
+
+        return Created(string.Empty, response);
+    }
+    // DELETE: api/Sponsor/{id}/tournaments/{tid}
+
+    [HttpDelete("{id}/tournaments/{tid}")]
+    public async Task<IActionResult> RemoveSponsorFromTournament(
+            int id,
+            int tid)
+    {
+        await _sponsorService.RemoveSponsorFromTournamentAsync(id, tid);
+        return NoContent();
+    }
 }

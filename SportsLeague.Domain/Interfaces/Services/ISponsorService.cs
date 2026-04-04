@@ -1,7 +1,4 @@
 ﻿using SportsLeague.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SportsLeague.Domain.Interfaces.Services
 {
@@ -12,8 +9,8 @@ namespace SportsLeague.Domain.Interfaces.Services
         Task<Sponsor?> GetByIdAsync(int id);
         Task UpdateAsync(int id, Sponsor sponsor);
         Task DeleteAsync(int id);
-
         Task<TournamentSponsor> AddSponsorToTournamentAsync(int sponsorId, int tournamentId, decimal contractAmount);
         Task<IEnumerable<TournamentSponsor>> GetTournamentsAsync(int sponsorId);
+        Task RemoveSponsorFromTournamentAsync(int sponsorId, int tournamentId); // Se agrega nuevo método para poder desvincular un sponsor de un torneo
     }
 }
