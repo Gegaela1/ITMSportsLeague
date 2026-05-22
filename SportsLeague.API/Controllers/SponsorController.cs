@@ -75,25 +75,30 @@ public class SponsorController : ControllerBase
         return NoContent();
     }
     // GET: api/Sponsor/{id}/tournaments
-
     [HttpGet("{id}/tournaments")]
     public async Task<ActionResult<IEnumerable<TournamentSponsorResponseDTO>>> GetTournaments(
-            int id)
+        int id)
     {
         var tournaments = await _sponsorService.GetTournamentsAsync(id);
 
         var response = tournaments.Select(ts => new TournamentSponsorResponseDTO
         {
+            Id = ts.Id,
+
             TournamentId = ts.TournamentId,
             TournamentName = ts.Tournament.Name,
+
+            SponsorId = ts.SponsorId,
+            SponsorName = ts.Sponsor.Name,
+
             ContractAmount = ts.ContractAmount,
             JoinedAt = ts.JoinedAt
         });
 
         return Ok(response);
     }
-    // POST: api/Sponsor/{id}/tournaments
 
+    // POST: api/Sponsor/{id}/tournaments
     [HttpPost("{id}/tournaments")]
     public async Task<ActionResult<TournamentSponsorResponseDTO>> AddSponsorToTournament(
             int id,
@@ -104,16 +109,17 @@ public class SponsorController : ControllerBase
             request.TournamentId,
             request.ContractAmount);
 
+
         var response = new TournamentSponsorResponseDTO
         {
             TournamentId = result.TournamentId,
-            TournamentName = result.Tournament.Name,
             ContractAmount = result.ContractAmount,
             JoinedAt = result.JoinedAt
         };
 
         return Created(string.Empty, response);
     }
+
     // DELETE: api/Sponsor/{id}/tournaments/{tid}
 
     [HttpDelete("{id}/tournaments/{tid}")]

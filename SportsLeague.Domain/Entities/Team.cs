@@ -12,5 +12,10 @@
         // Navigation Property - Colección de jugadores - Relación entre dos entidades sin generar un query en SQL
         public ICollection<Player> Players { get; set; } = new List<Player>();
         public ICollection<TournamentTeam> TournamentTeams { get; set; } = new List<TournamentTeam>();
+     
+        // Partidos como local
+        public ICollection<Match> HomeMatches { get; set; } = new List<Match>();
+        // Partidos como visitante
+        public ICollection<Match> AwayMatches { get; set; } = new List<Match>();
     }
 }

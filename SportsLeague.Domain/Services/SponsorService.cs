@@ -11,17 +11,18 @@ public class SponsorService : ISponsorService
     private readonly ISponsorRepository _sponsorRepository;
     private readonly ITournamentSponsorRepository _tournamentSponsorRepository;
     private readonly ILogger<SponsorService> _logger;
-
+    private readonly ITournamentRepository _tournamentRepository;
     public SponsorService(
         ISponsorRepository sponsorRepository,
         ITournamentSponsorRepository tournamentSponsorRepository,
+        ITournamentRepository tournamentRepository,
         ILogger<SponsorService> logger)
     {
         _sponsorRepository = sponsorRepository;
         _tournamentSponsorRepository = tournamentSponsorRepository;
+        _tournamentRepository = tournamentRepository;
         _logger = logger;
     }
-
     public async Task<Sponsor> CreateAsync(Sponsor sponsor)
     {
         var existing = await _sponsorRepository.GetByNameAsync(sponsor.Name);
@@ -64,7 +65,7 @@ public class SponsorService : ISponsorService
         var sponsor = await _sponsorRepository.GetByIdAsync(id);
 
         if (sponsor == null)
-            throw new KeyNotFoundException("Patrocinador no encontrada.");
+            throw new KeyNotFoundException("Patrocinador no encontrado.");
 
         await _sponsorRepository.DeleteAsync(id);
     }
@@ -74,6 +75,14 @@ public class SponsorService : ISponsorService
         int tournamentId,
         decimal contractAmount)
     {
+        var sponsor = await _sponsorRepository.GetByIdAsync(sponsorId);
+        if (sponsor == null)
+            throw new KeyNotFoundException("Patrocinador no encontrado.");
+
+        var tournament = await _tournamentRepository.GetByIdAsync(tournamentId);
+        if (tournament == null)
+            throw new KeyNotFoundException("Torneo no encontrado.");
+
         if (contractAmount <= 0)
             throw new InvalidOperationException("El importe del contrato debe ser mayor que cero..");
 
@@ -110,7 +119,7 @@ public class SponsorService : ISponsorService
 
         if (relation == null)
             throw new KeyNotFoundException(
-                "The sponsor is not linked to the specified tournament.");
+                "El patrocinador no está vinculado al torneo en cuestión.");
 
         await _tournamentSponsorRepository.DeleteAsync(relation.Id);
     }
