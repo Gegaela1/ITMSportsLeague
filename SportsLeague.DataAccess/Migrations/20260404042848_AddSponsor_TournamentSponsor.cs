@@ -4,51 +4,38 @@
 
 namespace SportsLeague.DataAccess.Migrations
 {
-    /// <inheritdoc />
     public partial class AddSponsor_TournamentSponsor : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Sponsors",
-                type: "nvarchar(150)",
-                maxLength: 150,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(450)");
+            // ✅ Crear tabla Sponsors correctamente
+            migrationBuilder.CreateTable(
+                name: "Sponsors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    ContactEmail = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sponsors", x => x.Id);
+                });
 
-            migrationBuilder.AlterColumn<string>(
-                name: "ContactEmail",
+            // ✅ (Opcional pero recomendado) Crear índice
+            migrationBuilder.CreateIndex(
+                name: "IX_Sponsors_Name",
                 table: "Sponsors",
-                type: "nvarchar(150)",
-                maxLength: 150,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                column: "Name");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Sponsors",
-                type: "nvarchar(450)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(150)",
-                oldMaxLength: 150);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "ContactEmail",
-                table: "Sponsors",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(150)",
-                oldMaxLength: 150);
+            // ✅ Eliminar tabla si se hace rollback
+            migrationBuilder.DropTable(
+                name: "Sponsors");
         }
     }
 }
+
